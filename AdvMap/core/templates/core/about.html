@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+{% load markdown_extras %}
+{% block title %}About | AdvMap{% endblock %}
+
+{% block content %}
+<h1>About AdvMap</h1>
+
+<div class="markdown">
+  {{ about_text|markdown|safe }}
+</div>
+{% endblock %}
+

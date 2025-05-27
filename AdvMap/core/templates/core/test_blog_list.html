@@ -1,0 +1,16 @@
+{% extends "core/base.html" %}
+{% load markdown_extras %}
+
+{% block content %}
+<h1>Test Markdown</h1>
+
+<p>{{ "**BOLD?**"|markdown }}</p>
+
+{% for post in posts %}
+    <h2>{{ post.title }}</h2>
+    <div>
+        {{ post.content|markdown|safe }}
+    </div>
+    <hr>
+{% endfor %}
+{% endblock %}

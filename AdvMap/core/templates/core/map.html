@@ -1,0 +1,53 @@
+{% extends "core/base.html" %}
+
+{% block title %}Map | AdvMap{% endblock %}
+
+{% block content %}
+<h1>Crag Map</h1>
+<main class="map-page">
+  <div id="map"></div>
+</main>
+
+<div id="map" style="height: 100vh;"></div>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        height: 100vh;
+        width: 100vw;
+    }
+</style>
+<!-- Leaflet CSS & JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+    var map = L.map('map').setView([20.0, 60.0], 3);  // Weltweite Übersicht
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    {% for crag in crags %}
+        L.marker([{{ crag.latitude }}, {{ crag.longitude }}]).addTo(map)
+            .bindPopup(`
+                <b>{{ crag.name|escapejs }}</b><br>
+                {{ crag.description|escapejs }}<br>
+                {% if crag.image %}
+                    <img src="{{ crag.image.url }}" alt="{{ crag.name|escapejs }}" width="300">
+                {% else %}
+                    <i>No image available</i>
+                {% endif %}
+               {% if crag.Instagram %}
+    <a href="{{ crag.Instagram }}" target="_blank">📸 Instagram</a>
+{% else %}
+    <i>No Instagram link available</i>
+{% endif %}
+
+            `);
+    {% endfor %}
+</script>
+{% endblock %}

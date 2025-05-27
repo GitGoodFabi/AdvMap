@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+
+{% load markdown_extras %}
+
+
+
+{% block title %}Blog | AdvMap{% endblock %}
+
+{% block content %}
+<h1>AdvMap Blog</h1>
+
+{% for post in posts %}
+    <article>
+        <h2><a href="{% url 'blog_detail' slug=post.slug %}">{{ post.title }}</a></h2>
+        <p><small>{{ post.created_at|date:"F d, Y H:i" }}</small></p>
+        {% if post.image %}
+            <img src="{{ post.image.url }}" width="300">
+        {% endif %}
+        <div>
+            {{ post.content|slice:":180"|markdown|safe }}{% if post.content|length > 180 %}...{% endif %}
+        </div>
+        <a href="{% url 'blog_detail' slug=post.slug %}">Read more</a>
+    </article>
+    <hr>
+{% empty %}
+    <p>No blog posts yet.</p>
+{% endfor %}
+{% endblock %}

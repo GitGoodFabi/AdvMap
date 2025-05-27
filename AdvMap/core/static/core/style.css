@@ -1,0 +1,91 @@
+
+
+body {
+  font-family: "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  color: #222;
+  background-color: #ffffff;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+h1, h2, h3 {
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+
+
+/* Gesamte Navigationsleiste */
+.navbar {
+  width: 100%;
+  background-color: lightblue;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 30px;
+}
+
+/* Container, der Logo & Links nebeneinander hält */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Logo */
+.navbar-logo img {
+  height: 80px;
+  width: auto;
+}
+
+/* Navigation links */
+.navbar-links {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  margin-left: 40px;
+}
+
+.navbar-links a {
+  flex: 1;
+  text-align: center;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 10px 0;
+}
+
+.navbar-links a:hover {
+  color: #000;
+  border-bottom: 2px solid #000;
+}
+
+
+main {
+  padding: 40px;
+  min-height: 400px;
+  background-color: #f9f9f9; /* nur zur Sichtbarkeit – kannst du ändern oder entfernen */
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+
+/* nur für die Map-Seite */
+.map-page {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+  height: calc(100vh - 80px); /* Höhe minus Navbar */
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+}
+/* Footer */
