@@ -1,5 +1,6 @@
 from django.db import models
 from core.route_marker_parser import extract_route_from_caption
+
 # Create your models here.
 class Crag(models.Model):
     name = models.CharField(max_length=180)
@@ -90,3 +91,18 @@ class ClimbingRoute(models.Model): # Climbing Route Model
     difficulty = models.CharField(max_length=20, blank=True)
     crag_name = models.CharField(max_length=100, blank=True)
     node_id = models.IntegerField(unique=True)
+
+
+class InstaRoute(models.Model):
+    route_name = models.TextField()
+    route_type = models.TextField()
+    post_url = models.URLField(unique=True)
+    image_url = models.URLField()
+    caption = models.TextField()
+    lat = models.FloatField(null=True)  # 👈 hier neu
+    lon = models.FloatField(null=True)  # 👈 hier neu
+    shortcode = models.CharField(max_length=100, unique=True, null=True, blank=True)	
+    
+    class Meta:
+        managed = False  # <- wichtig!
+        db_table = 'insta_routes'  # muss exakt zur Tabelle passen

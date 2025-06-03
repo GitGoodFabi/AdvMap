@@ -73,13 +73,20 @@ WSGI_APPLICATION = 'AdvMap.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'insta': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'insta_routes.db',  # ❗genau das brauchst du
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -132,3 +139,6 @@ STATIC_URL = '/static/'
 import os
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # für Entwicklung
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')     # für collectstatic in Produktion
+
+
+DATABASE_ROUTERS = ['core.apps.InstaRouter']

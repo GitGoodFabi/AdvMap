@@ -1,42 +1,70 @@
-from django.core.management.base import BaseCommand
+import requests
+from bs4 import BeautifulSoup
+import re
 import time
-from core.models import InstagramPost
-from core.thecrag_scraper import get_gps_from_thecrag
+from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
-    help = "Fetches GPS data for extracted routes from theCrag and saves them in InstagramPost"
+    help = "Fetch coordinates for climbing routes from theCrag"
 
-    def handle(self, *args, **options):
-        posts = InstagramPost.objects.exclude(extracted_route_name__isnull=True).iterator()
+    def handle(self, *args, **kwargs):
+        routes = [
+            "Cosmic Crimp",
+            "Il Richiamo del Mare",
+            "Geierwandführe",
+            "White Russian"
+        ]
 
-        updated = 0
-        skipped = 0
-        failed = 0
+        for route in routes:
+            self.stdout.write(f"\n📌 Searching coordinates for: {route}")
+            coords = self.get_coordinates(route)
+            if coords:
+                lat, lon = coords
+                self.stdout.write(f"✅ Found: {lat}, {lon}")
+            else:
+                self.stdout.write(f"⚠️ No coordinates found for: {route}")
 
-        for post in posts:
-            if post.lat is not None and post.lng is not None:
-                skipped += 1
-                continue
+    def get_coordinates(self, route_name):
+        search_term = route_name.replace(" ", "+")
+        search_url = f"https://www.thecrag.com/search?S={search_term}"
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+        }
 
-            route_name = post.extracted_route_name
-            self.stdout.write(f"📌 Searching coordinates for: {route_name}...")
+        try:
+            response = requests.get(search_url, headers=headers)
+            print(f"📡 Status code: {response.status_code}")
+            if response.status_code != 200:
+                print(f"❌ Fehler bei Suche für {route_name}")
+                return None
 
-            try:
-                lat, lng = get_gps_from_thecrag(route_name)
+            soup = BeautifulSoup(response.text, "lxml")
 
-                if lat and lng:
-                    post.lat = lat
-                    post.lng = lng
-                    post.save()
-                    self.stdout.write(self.style.SUCCESS(f"✅ Found: {lat}, {lng}"))
-                    updated += 1
-                else:
-                    self.stdout.write(self.style.WARNING("⚠️ No coordinates found"))
-                    failed += 1
-            except Exception as e:
-                self.stdout.write(self.style.ERROR(f"❌ Error fetching coordinates: {e}"))
-                failed += 1
+            # Suche nach Links, die auf eine Route oder einen Sektor deuten
+            route_links = [
+                link for link in soup.find_all("a", href=True)
+                if re.search(r"/climbing/|/route/", link["href"])
+            ]
 
-            time.sleep(1.1)  # Add a 1.1 second delay between requests
+            if not route_links:
+                print(f"⚠️ Keine passenden Routelinks für {route_name}")
+                return None
 
-        self.stdout.write(self.style.SUCCESS(f"✨ Done: {updated} updated, {skipped} skipped, {failed} failed."))
+            route_url = "https://www.thecrag.com" + route_links[0]["href"]
+            print(f"🔗 Folge Link: {route_url}")
+
+            time.sleep(1)  # Respectful delay
+            route_response = requests.get(route_url, headers=headers)
+
+            # Koordinaten aus JavaScript-Daten extrahieren
+            match = re.search(r'"lat":([0-9\.-]+),"lon":([0-9\.-]+)', route_response.text)
+            if match:
+                lat, lon = match.groups()
+                return float(lat), float(lon)
+
+            print(f"⚠️ Keine Koordinaten gefunden auf {route_url}")
+            return None
+
+        except Exception as e:
+            print(f"❌ Exception: {e}")
+            return None

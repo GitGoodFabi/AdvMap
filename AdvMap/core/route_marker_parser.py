@@ -1,6 +1,5 @@
 import re
 
-# Parse climbing route and type from Instagram caption
 def extract_route_from_caption(caption):
     if not caption:
         return None, None
@@ -20,15 +19,17 @@ def extract_route_from_caption(caption):
     return None, None
 
 
+# 🔍 TESTBLOCK – kann später wieder gelöscht werden
+if __name__ == "__main__":
+    test_captions = [
+        "#boulder: Cosmic Crimp",
+        "#sport: Geierwandführe",
+        "#multi: Il Richiamo del Mare",
+        "Just climbed something awesome! #boulder:White Russian",
+        "Kein Hashtag hier.",
+        "#multi : Mit Leerzeichen",
+    ]
 
-#for caption in test_captions:
-    route, typ = extract_route_from_caption(caption)
-    print(f"📌 Caption: {caption}\n🔍 Route: {route} | Type: {typ}\n")
-# This function will extract the route name and type from the caption.
-# It uses regex to find patterns like #boulder:RouteName, #sport:RouteName, and #multi:RouteName.
-# The extracted route name and type are returned as a tuple.
-# If no match is found, it returns (None, None).
-# This is a simple example and can be expanded based on the specific needs of the application.
-# The regex patterns can be adjusted to match different formats or additional types of routes.
-# The function can also be integrated into a larger application where Instagram captions are processed.
-# The extracted route names and types can be stored in a database or used for further processing.
+    for caption in test_captions:
+        route, typ = extract_route_from_caption(caption)
+        print(f"📌 Caption: {caption}\n➡️ Route: {route} | Type: {typ}\n")

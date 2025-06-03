@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Crag
+from .models import Crag, InstaRoute
 # Create your views here.
 from django.http import HttpResponse
 def home(request):
@@ -28,10 +28,16 @@ Whether you're motorbiking across **Africa** or bouldering in *Fontainebleau* â€
     return render(request, "core/about.html", {"about_text": about_text})
 
 def about(request):
-    return render(request, 'core/about.html')
+    return render(request, 'core/map.html', {'routes': routes})
+
 def map_view(request):
     crags = Crag.objects.all()
     return render(request, 'core/map.html', {'crags': crags})
+
+def map_view(request):
+    routes = InstaRoute.objects.all()
+    return render(request, 'core/map.html', {'routes': routes})
+
 
 from .models import Post
 

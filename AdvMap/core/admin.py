@@ -1,6 +1,25 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from core.models import InstagramPost, Crag, Post, ClimbingRoute, CragLocation
+from core.models import InstagramPost, Crag, Post, ClimbingRoute, CragLocation, InstaRoute
+
+
+
+from django.contrib import admin
+#from .models import InstaRoute
+
+# @admin.register(InstaRoute)
+# class InstaRouteAdmin(admin.ModelAdmin):
+#     list_display = ("route_name", "route_type", "lat", "lon", "shortcode", "post_url")
+@admin.register(InstaRoute)
+class InstaRouteAdmin(admin.ModelAdmin):
+    list_display = ("route_name", "route_type", "post_url", "shortcode", "lat", "lon")
+    # list_filter = ("route_type", "created_at")
+    # search_fields = ("route_name", "route_type", "shortcode")
+    # readonly_fields = ("preview_image", "post_url", "shortcode", "image_url")
+    # def preview_image(self, obj):
+    #     if obj.image_url:
+    #         return format_html('<img src="{}" width="300" />', obj.image_url)
+    #     return "No image"   
 
 @admin.register(InstagramPost)
 class InstagramPostAdmin(admin.ModelAdmin):

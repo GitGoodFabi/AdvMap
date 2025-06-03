@@ -29,9 +29,8 @@ python manage.py runserver
 
 
 Because the vibe coder crafting this page has the memory of a bird here is how to start the server in cmd:
-C:\Users\Admin\Documents\AdvMap> venv\Scripts\activate
-(venv) PS C:\Users\Admin\Documents\AdvMap> cd AdvMap
-(venv) PS C:\Users\Admin\Documents\AdvMap\AdvMap> python manage.py runserver    
+C:\Users\Admin\Documents\AdvMap> .\venv\Scripts\activate -> cd AdvMap
+(venv) PS C:\Users\Admin\Documents\AdvMap\AdvMap > python manage.py runserver    
 
 🌌 Git:
 # 🚀 AdvMap auf neuem Gerät klonen & entwickeln

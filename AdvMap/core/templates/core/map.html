@@ -3,6 +3,14 @@
 {% block title %}Map | AdvMap{% endblock %}
 
 {% block content %}
+<h2>Routenliste:</h2>
+<ul>
+{% for route in routes %}
+    <li>{{ route.route_name }} – {{ route.lat }}, {{ route.lon }}</li>
+{% empty %}
+    <li>❌ Keine Routen in Datenbank</li>
+{% endfor %}
+</ul>
 <h1>Crag Map</h1>
 <main class="map-page">
   <div id="map"></div>
@@ -49,5 +57,14 @@
 
             `);
     {% endfor %}
+
+    {% for route in routes %}
+    L.marker([{{ route.lat }}, {{ route.lon }}]).addTo(map).bindPopup(`
+        <strong>{{ route.route_name }}</strong><br>
+        {{ route.route_type }}<br>
+        <a href="{{ route.post_url }}" target="_blank">Instagram</a>
+    `);
+{% endfor %}
+
 </script>
 {% endblock %}
